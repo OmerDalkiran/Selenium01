@@ -1,0 +1,203 @@
+package day01_DriverMethods;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Day01_Selenium {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver","src/resources/drivers/chromedriver.exe");
+        /*
+            En temel haliyle otomasyon yapmak için  Class'ımıza otaomasyon için gerekli olan
+        webdriver'in yerini göstermemiz gerekir. Bunun için java kütüphanesinden System.setProperty()
+        methodunun içine ilk olarak driver'i yazarız. İkinci olarak driver'in fiziki yolunu kopyalarız
+         */
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.amazon.com");
+
+
+    }
+}
+-------------------------------------------------
+package day01_DriverMethods;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Day01_ClassWork {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver","src/resources/drivers/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        //Amazon sayfasina gidelim. https://www.amazon.com/
+        driver.get("https://www.amazon.com");
+        //Sayfa basligini(title) yazdirin
+        System.out.println("Sayfa Baslığı : "+driver.getTitle());
+        //Sayfa basliginin “Amazon” icerdigini test edin
+        String actualTitle = driver.getTitle();
+        if(actualTitle.contains("Amazon")){
+            System.out.println("Title testi PASSED");
+        }else System.out.println("Title testi FAILED");
+        //Sayfa adresini(url) yazdirin
+        System.out.println("Sayfa Url'i : "+driver.getCurrentUrl());
+        //Sayfa url’inin “amazon” icerdigini test edin.
+        String actualUrl = driver.getCurrentUrl();
+        if(actualUrl.contains("amazon")){
+            System.out.println("Url Testi PASSED");
+        }else System.out.println("Url Testi FAILED");
+        //Sayfa handle degerini yazdirin
+        System.out.println("Window Handle Değeri : "+driver.getWindowHandle());
+        //Sayfa HTML kodlarinda “Gateway” kelimesi gectigini test edin
+        String sayfaKodlari = driver.getPageSource();
+        if(sayfaKodlari.contains("Gateway")){
+            System.out.println("Source Code Testi PASSED");
+        }else System.out.println("Source Code Testi FAILED");
+        //Sayfayi kapatin.
+        driver.close(); // Sayfayi kapatmak için close() methodu kullanırız
+    }
+}
+--------------------------------------------
+
+package day01_DriverMethods;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.time.Duration;
+
+public class Day01_ClassWork2 {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver","src/resources/drivers/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));// Bu method sayfadaki her bir webelement için
+                                                                            // max. bekleme süresini belirler
+
+        //ChromeDriver kullanarak, facebook sayfasina gidin ve sayfa basliginin (title) “facebook”
+        //oldugunu dogrulayin (verify), degilse dogru basligi yazdirin.
+        driver.get("https://facebook.com");
+        String actualTitle = driver.getTitle();
+        if(actualTitle.contains("facebook")){
+            System.out.println("Title Testi PASSED");
+        }else System.out.println("Title Testi FAILED -->"+ actualTitle);
+
+        //Sayfa URL’inin “facebook” kelimesi icerdigini dogrulayin, icermiyorsa “actual” URL’i
+        //yazdirin.
+        String actualUrl = driver.getCurrentUrl();
+        if(actualUrl.contains("facebook")){
+            System.out.println("Url Testi PASSED");
+        }else System.out.println("Url Testi FAILED" + actualUrl);
+
+        //https://www.walmart.com/ sayfasina gidin.
+        driver.get("https://www.walmart.com/");
+        //Sayfa basliginin “Walmart.com” icerdigini dogrulayin.
+        String actualWalmartTitle = driver.getTitle();
+        String expectedWalmartTitle = "Walmart.com";
+        if(actualWalmartTitle.contains(expectedWalmartTitle)){
+            System.out.println("Title Testi PASSED");
+        }else System.out.println("Title Testi FAILED");
+
+        //Tekrar “facebook” sayfasina donun
+        driver.navigate().back();
+
+        //Sayfayi yenileyin
+        driver.navigate().refresh();
+
+        //Browser’i kapatin
+        driver.close();
+
+    }
+}
+---------------------------------------------------
+package day01_DriverMethods;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Day01_DriverMethods {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver","src/resources/drivers/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();// Bos bir browser açtık
+        driver.get("https://www.amazon.com"); // ilk olarak gitmek istediğimiz sayfayı belirtiriz
+        System.out.println("Sayfa Başlığı : "+driver.getTitle());
+        System.out.println("Sayfa Url'i : "+driver.getCurrentUrl());
+        //System.out.println(driver.getPageSource());
+        System.out.println(driver.getWindowHandle());// Bize o window'a ait hash değerini verir. Biz bu hash değerlerini
+                                                    // bir string'e atayıp pencereler arası geçiş yapabiliriz
+
+    }
+}
+------------------------------------------------
+package day01_DriverMethods;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Day01_ManageMethods {
+    public static void main(String[] args) throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver","src/resources/drivers/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        //Amazon soyfasina gidelim. https://www.amazon.com/
+        driver.get("https://www.amazon.com/");
+
+        //Sayfanin konumunu ve boyutlarini yazdirin
+        System.out.println("Sayfanın Konumu = "+driver.manage().window().getPosition());
+        System.out.println("Sayfanın Boyutları = "+driver.manage().window().getSize());
+
+        //Sayfayi simge durumuna getirin
+        driver.manage().window().minimize();
+
+        //simge durumunda 3 saniye bekleyip sayfayi maximize yapin
+        Thread.sleep(3000);
+        driver.manage().window().maximize();
+
+        //Sayfanin konumunu ve boyutlarini maximize durumunda yazdirin
+        System.out.println("Sayfanın Konumu = "+driver.manage().window().getPosition());
+        System.out.println("Sayfanın Boyutları = "+driver.manage().window().getSize());
+
+        //Sayfayi fullscreen yapin
+        Thread.sleep(3000);
+        driver.manage().window().fullscreen();
+
+        //Sayfanin konumunu ve boyutlarini fullscreen durumunda yazdirin
+        System.out.println("Sayfanın Konumu = "+driver.manage().window().getPosition());
+        System.out.println("Sayfanın Boyutları = "+driver.manage().window().getSize());
+
+        //Sayfayi kapatin
+        Thread.sleep(2000);
+        driver.close();
+    }
+}
+-------------------------------
+package day01_DriverMethods;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Day01_NavigateMethod {
+    public static void main(String[] args) throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver","src/resources/drivers/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        //Amazon sayfasına gidelim
+        //driver.navigate().to("https://amazon.com");
+        driver.get("https://amazon.com");
+
+        //techproeducation sayfasına gidelim
+        Thread.sleep(3000);
+        //driver.navigate().to("https://techproeducation.com");
+        driver.get("https://techproeducation.com");
+        //Tekrar amazon sayfasına dönelim
+        Thread.sleep(3000);
+        driver.navigate().back(); // Amazon sayfasına geri döner
+
+        //Tekrar techproeducation sayfasına gidelim
+        Thread.sleep(3000);
+        driver.navigate().forward(); // Techproya gider
+
+        //Son sayfada sayfayı yenileyelim(refresh)
+        Thread.sleep(3000);
+        driver.navigate().refresh();
+        //Ve sayfayı kapatalım
+        driver.close();
+    }
+}
+-----------------------------------
